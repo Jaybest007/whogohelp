@@ -1,5 +1,5 @@
 <?php 
-header("Access-control-Allow-Origin: *");
+header("Access-control-Allow-Origin: https://whogohelp-backend.onrender.com");
 header("Acess-Control-Allow-Method: GET, POST, OPTIONS ");
 header("Access-Control-Allow:Headers: content-type");
 header("content-Type: application/json");
