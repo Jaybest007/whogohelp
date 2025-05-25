@@ -9,10 +9,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit;
 }
-if (isset($_SESSION['user'])){
+if (isset($_SESSION['USER'])){
     echo json_encode([
         'loggedIn' => true,
-        'user' => $_SESSION['user']
+        'user' => $_SESSION['USER']
     ]);
 
 }else{

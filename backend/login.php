@@ -1,5 +1,7 @@
 <?php 
+session_start();
 header("Access-Control-Allow-Origin: http://localhost:5173");
+header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
@@ -24,7 +26,7 @@ if(!isset($data['email']) || !isset($data['password'])){
 }
 
 $username = htmlspecialchars(strtolower(trim($data['email'])));
-$password = password_hash($data['password'], PASSWORD_DEFAULT);
+$password = $data['password'];
 
 //let load json file
 $userFile = 'users.json';
@@ -39,12 +41,18 @@ if(!file_exists($userFile)){
 $users = json_decode(file_get_contents($userFile), true);
 
 foreach($users as $user ){
-    if($user["email"] === $username && $user['password'] === $password){
+    if($user["email"] === $username && password_verify($password, $user['password'])){
+        // Set session with user info
+        $_SESSION['USER'] = [
+            'name' => $user['name'],
+            'username' => $user['username'],
+            'email' => $user['email']
+        ];
         http_response_code(200);
-        echo json_encode(["sucess" => "Login successful"]);
+        echo json_encode(["success" => "Login successful"]);
         exit;
     };
-    if($user["email"] === $username && $user['password'] !== $password){
+    if($user["email"] === $username && !password_verify($password, $user['password'])){
         http_response_code(400);
         echo json_encode(["error" => "Incorrect password"]);
         exit;
