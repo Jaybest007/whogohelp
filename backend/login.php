@@ -40,6 +40,12 @@ if(!file_exists($userFile)){
 
 $users = json_decode(file_get_contents($userFile), true);
 
+if (!is_array($users)) {
+    http_response_code(500);
+    echo json_encode(["error" => "User database is corrupted"]);
+    exit;
+}
+
 foreach($users as $user ){
     if($user["email"] === $username && password_verify($password, $user['password'])){
         // Set session with user info
@@ -61,3 +67,7 @@ foreach($users as $user ){
 http_response_code(400);
 echo json_encode(["error" => "Incorrect username or password"]);
 exit;
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
