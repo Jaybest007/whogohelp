@@ -29,7 +29,7 @@ $username = htmlspecialchars(strtolower(trim($data['email'])));
 $password = $data['password'];
 
 //let load json file
-$userFile = 'users.json';
+$userFile = 'user.json';
 
 
 if(!file_exists($userFile)){
