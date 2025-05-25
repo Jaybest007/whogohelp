@@ -58,11 +58,18 @@ import { useNavigate } from 'react-router-dom';
                 headers: {
                     "Content-Type": "application/json",
                 },
-                // credentials: "include",
                 body: JSON.stringify(loginData),
             });
 
-            const data = await response.json();
+            // Try to parse JSON, but handle HTML/error responses
+            let data;
+            try {
+                data = await response.json();
+            } catch (jsonErr) {
+                setError("Server error: Invalid response format");
+                setLoading(false);
+                return;
+            }
 
             if (response.ok){
                 setError("");
