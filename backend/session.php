@@ -1,8 +1,4 @@
 <?php
-session_set_cookie_params([
-    'samesite' => 'None',
-    'secure' => true,
-]);
 session_start();
 header("Access-Control-Allow-Origin: https://ideal-acorn-vj94vv9gr4pfwxvw-5173.app.github.dev");
 header("Access-Control-Allow-Credentials: true");
