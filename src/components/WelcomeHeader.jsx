@@ -11,8 +11,8 @@ const WelcomeHeader = () => {
   const navigate = useNavigate();
 
   useEffect(()=> {
-    fetch("https://d963-197-210-226-35.ngrok-free.app/back/session.php", {
-      credentials: "include"
+    fetch("https://whogohelp-backend.onrender.com/backend/session.php", {
+      credentials: "include",
     })
     .then(res => res.json().catch(()=> ({})))
     .then(data => {

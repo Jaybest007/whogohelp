@@ -93,7 +93,7 @@ function Signup(){
         }
 
         try{
-            const response = await fetch("https://d963-197-210-226-35.ngrok-free.app/back/signup.php" ,{
+            const response = await fetch("https://whogohelp-backend.onrender.com/backend/signup.php" ,{
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

@@ -1,4 +1,4 @@
-import react, {useState} from 'react';
+import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
  function Login(){
 
@@ -50,14 +50,15 @@ import { useNavigate } from 'react-router-dom';
             return;
         }
 
-       try{
+       try{ 
              
-            const response = await fetch("https://d963-197-210-226-35.ngrok-free.app/back/login.php", {
-                method: "POST",
+            const response = await fetch("https://whogohelp-backend.onrender.com/backend/login.php", {
+                method: 'POST',
+                credentials: 'include',
                 headers: {
-                    "content-Type": "application/json",
+                    "Content-Type": "application/json",
                 },
-                credentials: "include",
+                // credentials: "include",
                 body: JSON.stringify(loginData),
             });
 
@@ -69,7 +70,7 @@ import { useNavigate } from 'react-router-dom';
                 console.log(data.success);
                 navigate("/dashboard")
             } else{
-                setError(data.error)
+                setError(data.error || "Login failed");
                 console.log("login failed")
             }
 
