@@ -93,7 +93,7 @@ function Signup(){
         }
 
         try{
-            const response = await fetch("https://ideal-acorn-vj94vv9gr4pfwxvw-80.app.github.dev/backend/signup.php" ,{
+            const response = await fetch("https://ideal-acorn-vj94vv9gr4pfwxvw-80.app.github.dev/signup.php" ,{
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
