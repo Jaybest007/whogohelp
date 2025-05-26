@@ -54,7 +54,7 @@ function PostErrand(){
 
         try{
             
-            const response = await fetch("https://whogohelp-backend.onrender.com/post_errand.php", {
+            const response = await fetch("https://whogohelp-backend.onrender.com/backend/post_errand.php", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",                    
@@ -99,29 +99,78 @@ function PostErrand(){
                 <p className="heading-sub text-thin md:text-lg mx-2 mb-4 text-center">
                     Post to find help with your errand
                 </p>
-                <p>{error.server}</p>
+                <p className='text-black text-l mb-2 italic' >{error.server}</p>
                 <form onSubmit={handleSubmit}>
-                    <div className="w-full flex flex-col md:grid md:grid-cols-2 md:gap-2">
-                        <input type="text" name="title" className="input-style mb-2 md:mb-0" placeholder="Title" value={errandData.title} onChange={handleInput} />
-                        {/* <p className='text-black text-l mb-2 italic '>{error.title}</p> */}
-                        
-                        <input type="text" name="description" className="input-style mb-2 md:mb-0" placeholder="Description" value={errandData.description} onChange={handleInput}  />
-                        {/* <p className='text-black text-l mb-2 italic '>{error.description}</p> */}
-                        
-                        <input type="text" name="location" className="input-style mb-2 md:mb-0" placeholder="Location" value={errandData.location} onChange={handleInput} />
-                        {/* <p className='text-black text-l mb-2 italic '>{error.location}</p> */}
-                        
-                        <input type="number" name="reward" className="input-style mb-2 md:mb-0" placeholder="Reward" value={errandData.reward} onChange={handleInput} />
-                        {/* <p className='text-black text-l mb-2 italic '>{error.reward}</p> */}
+                    <div className="w-full flex flex-col md:grid md:grid-cols-2 md:gap-4">
+                        <div className="flex flex-col mb-2">
+                            <input
+                                type="text"
+                                name="title"
+                                className="input-style"
+                                placeholder="Title"
+                                value={errandData.title}
+                                onChange={handleInput}
+                            />
+                            {error.title && (
+                                <p className="text-red-600 text-sm italic mt-1">{error.title}</p>
+                            )}
+                        </div>
+                        <div className="flex flex-col mb-2">
+                            <input
+                                type="text"
+                                name="description"
+                                className="input-style"
+                                placeholder="Description"
+                                value={errandData.description}
+                                onChange={handleInput}
+                            />
+                            {error.description && (
+                                <p className="text-red-600 text-sm italic mt-1">{error.description}</p>
+                            )}
+                        </div>
+                        <div className="flex flex-col mb-2">
+                            <input
+                                type="text"
+                                name="location"
+                                className="input-style"
+                                placeholder="Location"
+                                value={errandData.location}
+                                onChange={handleInput}
+                            />
+                            {error.location && (
+                                <p className="text-red-600 text-sm italic mt-1">{error.location}</p>
+                            )}
+                        </div>
+                        <div className="flex flex-col mb-2">
+                            <input
+                                type="number"
+                                name="reward"
+                                className="input-style"
+                                placeholder="Reward"
+                                value={errandData.reward}
+                                onChange={handleInput}
+                            />
+                            {error.reward && (
+                                <p className="text-red-600 text-sm italic mt-1">{error.reward}</p>
+                            )}
+                        </div>
                     </div>
-                    <input type="text" name="notes" className="input-style my-2 w-full" placeholder="Give me more details about the errand" value={errandData.notes} onChange={handleInput} />
-                    
+                    <input
+                        type="text"
+                        name="notes"
+                        className="input-style my-2 w-full"
+                        placeholder="Give me more details about the errand"
+                        value={errandData.notes}
+                        onChange={handleInput}
+                    />
                     <button className="bg-black w-full text-white py-3 my-2 mb-3 rounded-md hover:bg-gray-900 cursor-pointer transition-colors duration-200 text-base md:text-lg">
                         {loading ? (
                             <div className="flex justify-center items-center my-2">
                                 <div className="w-8 h-8 border-4 border-white border-t-orange-500 rounded-full animate-spin"></div>
                             </div>
-                        ) : ("Post Errand" )}
+                        ) : (
+                            "Post Errand"
+                        )}
                     </button>
                 </form>
             </>

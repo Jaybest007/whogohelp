@@ -1,5 +1,5 @@
 <?php
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: https://ideal-acorn-vj94vv9gr4pfwxvw-5173.app.github.dev");
 header("Access-Control-Allow-Method: POST, GET, METHODS");
 header("Access-Control-Allow-Headers: Content-Type");
 header('Content-Type: application/json');
