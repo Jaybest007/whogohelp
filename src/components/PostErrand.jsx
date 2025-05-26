@@ -32,7 +32,7 @@ function PostErrand(){
     async function handleSubmit(event){
         event.preventDefault()
         setLoading(true)
-        SetPosted(true)
+        
 
         const {title, description, location, reward, notes} = errandData;
 
@@ -70,13 +70,12 @@ function PostErrand(){
 
             }else{
                 setError((error) => ({...error, server: data.error}));
-                console.log(data.error);
+                console.log(data.error);   
             }
-
-        }catch(e){
-            console.log(e);
+        }catch(err){
+            console.log(err);
             setError((error) => ({...error, server: "An error occured"}))
-            SetPosted(false)
+            
         }finally{
                 setLoading(false);
                 
@@ -99,7 +98,7 @@ function PostErrand(){
                 <p className="heading-sub text-thin md:text-lg mx-2 mb-4 text-center">
                     Post to find help with your errand
                 </p>
-                <p className='text-black text-l mb-2 italic' >{error.server}</p>
+                <p className="text-red-600 text-sm italic mt-1" >{error.server}</p>
                 <form onSubmit={handleSubmit}>
                     <div className="w-full flex flex-col md:grid md:grid-cols-2 md:gap-4">
                         <div className="flex flex-col mb-2">

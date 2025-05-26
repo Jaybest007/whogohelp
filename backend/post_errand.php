@@ -13,7 +13,7 @@ $data = json_decode(file_get_contents("php://input"), true);
 
 if($data === null){
     http_response_code(400);
-    echo json_encode(["error" => ["server", "All input is required"]]);
+    echo json_encode(["error" => ["server","All input is required"]]);
     exit;
 };
 
@@ -25,7 +25,7 @@ if(
     !isset($data['notes'])
 ){
     http_response_code(400);
-    echo json_encode(["error" => ["server", "All input is required"]]);
+    echo json_encode(["error" => ["server","All input is required"]]);
     exit;
 }
 
@@ -58,7 +58,7 @@ if(file_exists($file)){
     $errands = json_decode($json, true) ?? [];
 }else{
     http_response_code(400);
-    echo json_encode(["error" => ["server", "Errand database cant be found"]]);
+    echo json_encode(["error" => ["server","Errand database cant be found"]]);
     exit;
 };
 
@@ -82,7 +82,7 @@ if(file_put_contents($file, json_encode($errands, JSON_PRETTY_PRINT))){
     http_response_code(200);
 }else{
     http_response_code(500);
-    echo json_encode(["errors" => ['server' => "Failed to save data"]]);
+    echo json_encode(["errors" => ['server' =>"Failed to save data"]]);
     exit;
 }
 
