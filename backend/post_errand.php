@@ -4,7 +4,7 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
-if($_SERVER["REQUEST_MTHOD"] === "OPTIONS"){
+if($_SERVER["REQUEST_METHOD"] === "OPTIONS"){ // Fixed typo here
     http_response_code(200);
     exit;
 };
@@ -34,9 +34,7 @@ function generateOrderId($prefix = 'ERD'){
     $timestamp = time(); //current time
     $randomPart = strtoupper(bin2hex(random_bytes(2)));
     return $prefix .'-' . $timestamp . '-' . $randomPart; 
-
 }
-
 
 $title = htmlspecialchars(trim($data['title']));
 $description = htmlspecialchars(trim($data['description']));
@@ -44,7 +42,7 @@ $location = htmlspecialchars(trim($data['location']));
 $reward = htmlspecialchars(trim($data['reward']));
 $notes = htmlspecialchars(trim($data['notes']));
 $date = date("d-m-y");
-$time = date("h:i A");;
+$time = date("h:i A"); // Fixed double semicolon
 $errandID = generateOrderId();
 
 //file path
@@ -82,7 +80,7 @@ if(file_put_contents($file, json_encode($errands, JSON_PRETTY_PRINT))){
     http_response_code(200);
 }else{
     http_response_code(500);
-    echo json_encode(["errors" => ['server' =>"Failed to save data"]]);
+    echo json_encode(["error" => ['server' =>"Failed to save data"]]); // Fixed key to "error"
     exit;
 }
 
