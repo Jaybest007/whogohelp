@@ -53,8 +53,7 @@ function PostErrand(){
             return;
         }
 
-        try{
-            
+        try {
             const response = await fetch("https://whogohelp-backend.onrender.com/backend/post_errand.php", {
                 method: "POST",
                 headers: {
@@ -63,25 +62,32 @@ function PostErrand(){
                 body: JSON.stringify(errandData)
             });
 
-            const data = await response.json();
+            const text = await response.text();
+            let data = {};
+            if (text) {
+                try {
+                    data = JSON.parse(text);
+                } catch (err) {
+                    setError((error) => ({ ...error, server: "Server returned invalid response" }));
+                    setLoading(false);
+                    return;
+                }
+            }
 
             if(response.ok){
                 setError((error) => ({ ...error, server: "" }));
                 SetPosted(true);
-                setSuccess(data.success)
-
-            }else{
-                setError((error) => ({...error, server: data.error}));
+                setSuccess(data.success);
+            } else {
+                setError((error) => ({...error, server: data.error || "An error occurred"}));
                 console.log(data.error);   
             }
-        }catch(err){
+        } catch(err){
             console.log(err);
-            setError((error) => ({...error, server: "An error occured"}))
-            
-        }finally{
-                setLoading(false);
-                
-            }
+            setError((error) => ({...error, server: "An error occurred"}))
+        } finally {
+            setLoading(false);
+        }
 
 
 
