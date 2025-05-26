@@ -78,6 +78,7 @@ $errands[] = $userErrands;
 //save to file
 if(file_put_contents($file, json_encode($errands, JSON_PRETTY_PRINT))){
     http_response_code(200);
+    echo json_encode(["success" => true]);
 }else{
     http_response_code(500);
     echo json_encode(["error" => ['server' =>"Failed to save data"]]); // Fixed key to "error"

@@ -19,6 +19,7 @@ function PostErrand(){
         server: "",
         
     })
+    const [success, setSuccess] =useState(false)
     const [posted, SetPosted] = useState(false)
     const [loading, setLoading] = useState(false)
 
@@ -67,6 +68,7 @@ function PostErrand(){
             if(response.ok){
                 setError((error) => ({ ...error, server: "" }));
                 SetPosted(true);
+                setSuccess(data.success)
 
             }else{
                 setError((error) => ({...error, server: data.error}));
