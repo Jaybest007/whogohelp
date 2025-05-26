@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import { FaCheckCircle } from 'react-icons/fa';
 
 function PostErrand(){
 
@@ -15,8 +16,11 @@ function PostErrand(){
         description: "",
         location: "",
         reward: "",
+        server: "",
         
     })
+    const [posted, SetPosted] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     function handleInput(event){
         const {name, value} = event.target;
@@ -25,8 +29,10 @@ function PostErrand(){
         setError({...error, [name]:""})
     }
     
-    function handleSubmit(event){
+    async function handleSubmit(event){
         event.preventDefault()
+        setLoading(true)
+        SetPosted(true)
 
         const {title, description, location, reward, notes} = errandData;
 
@@ -46,36 +52,81 @@ function PostErrand(){
             return;
         }
 
+        try{
+            
+            const response = await fetch("https://whogohelp-backend.onrender.com/post_errand.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",                    
+                },
+                body: JSON.stringify(errandData)
+            });
+
+            const data = await response.json();
+
+            if(response.ok){
+                setError((error) => ({ ...error, server: "" }));
+                SetPosted(true);
+
+            }else{
+                setError((error) => ({...error, server: data.error}));
+                console.log(data.error);
+            }
+
+        }catch(e){
+            console.log(e);
+            setError((error) => ({...error, server: "An error occured"}))
+            SetPosted(false)
+        }finally{
+                setLoading(false);
+                
+            }
+
+
+
     }
     return(
          <div className="bodyContainer rounded-xl p-3 md:p-2 bg-orange-500 text-white flex flex-col items-center justify-center shadow-lg">
+        
+        {posted ? (
+            <div className="w-full text-white text-center flex flex-col justify-center items-center my-10">
+                <FaCheckCircle className="text-7xl mb-4 mx-auto" />
+                <h1 className="text-2xl md:text-3xl font-semibold">Your Errand has been posted successfully</h1>
+            </div>
+        ) : ( 
+            <>
                 <h1 className="font-bold text-3xl md:text-3xl mx-2 mb-2">Have an errand?</h1>
                 <p className="heading-sub text-thin md:text-lg mx-2 mb-4 text-center">
                     Post to find help with your errand
                 </p>
+                <p>{error.server}</p>
                 <form onSubmit={handleSubmit}>
-                        <div className="w-full flex flex-col md:grid md:grid-cols-2 md:gap-2">
+                    <div className="w-full flex flex-col md:grid md:grid-cols-2 md:gap-2">
                         <input type="text" name="title" className="input-style mb-2 md:mb-0" placeholder="Title" value={errandData.title} onChange={handleInput} />
-                    {/* <p className='text-black text-l mb-2 italic '>{error.title}</p> */}
+                        {/* <p className='text-black text-l mb-2 italic '>{error.title}</p> */}
                         
                         <input type="text" name="description" className="input-style mb-2 md:mb-0" placeholder="Description" value={errandData.description} onChange={handleInput}  />
-                    {/* <p className='text-black text-l mb-2 italic '>{error.description}</p> */}
+                        {/* <p className='text-black text-l mb-2 italic '>{error.description}</p> */}
                         
                         <input type="text" name="location" className="input-style mb-2 md:mb-0" placeholder="Location" value={errandData.location} onChange={handleInput} />
-                    {/* <p className='text-black text-l mb-2 italic '>{error.location}</p> */}
+                        {/* <p className='text-black text-l mb-2 italic '>{error.location}</p> */}
                         
                         <input type="number" name="reward" className="input-style mb-2 md:mb-0" placeholder="Reward" value={errandData.reward} onChange={handleInput} />
-                    {/* <p className='text-black text-l mb-2 italic '>{error.reward}</p> */}
-                    
-                    
+                        {/* <p className='text-black text-l mb-2 italic '>{error.reward}</p> */}
                     </div>
                     <input type="text" name="notes" className="input-style my-2 w-full" placeholder="Give me more details about the errand" value={errandData.notes} onChange={handleInput} />
                     
                     <button className="bg-black w-full text-white py-3 my-2 mb-3 rounded-md hover:bg-gray-900 cursor-pointer transition-colors duration-200 text-base md:text-lg">
-                        Post Errand
+                        {loading ? (
+                            <div className="flex justify-center items-center my-2">
+                                <div className="w-8 h-8 border-4 border-white border-t-orange-500 rounded-full animate-spin"></div>
+                            </div>
+                        ) : ("Post Errand" )}
                     </button>
                 </form>
-            </div> 
+            </>
+        )}
+    </div> 
     )
 
 }

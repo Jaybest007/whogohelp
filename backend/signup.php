@@ -36,6 +36,7 @@ $password = htmlspecialchars(trim($data['password']));
 $confirmpassword = htmlspecialchars(trim($data['confirmPassword']));
 
 
+
 if($password !== $confirmpassword){
     http_response_code(400);
     echo json_encode(["errors" => ["confirmPassword" => "Password doesn't match"]]);
