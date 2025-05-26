@@ -1,8 +1,8 @@
 <?php
 header("Access-Control-Allow-Origin: https://ideal-acorn-vj94vv9gr4pfwxvw-5173.app.github.dev");
-header("Access-Control-Allow-Method: POST, GET, METHODS");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
-header('Content-Type: application/json');
+header("Content-Type: application/json");
 
 if($_SERVER["REQUEST_MTHOD"] === "OPTIONS"){
     http_response_code(200);
@@ -44,7 +44,7 @@ $location = htmlspecialchars(trim($data['location']));
 $reward = htmlspecialchars(trim($data['reward']));
 $notes = htmlspecialchars(trim($data['notes']));
 $date = date("d-m-y");
-$time = time("h:i A");
+$time = date("h:i A");;
 $errandID = generateOrderId();
 
 //file path
@@ -75,7 +75,7 @@ $userErrands =[
 ];
 
 //append errand data
-$errands = $userErrands;
+$errands[] = $userErrands;
 
 //save to file
 if(file_put_contents($file, json_encode($errands, JSON_PRETTY_PRINT))){
