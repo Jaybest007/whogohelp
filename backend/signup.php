@@ -4,6 +4,7 @@ header("Access-Control-Allow-Origin: https://ideal-acorn-vj94vv9gr4pfwxvw-5173.a
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
+include "db_connect.php";
 
 if($_SERVER["REQUEST_METHOD"] === "OPTIONS"){
     http_response_code(200);
@@ -25,7 +26,8 @@ if(
 !isset($data['password']) ||
 !isset($data['confirmPassword'])
 ){
-    http_response_code(400);echo json_encode(["errors" => ["server" => "All input is required"]]);
+    http_response_code(400);
+    echo json_encode(["errors" => ["server" => "All input is required"]]);
     exit;
 }
 
@@ -33,9 +35,9 @@ $name = htmlspecialchars(trim($data['name']));
 $username = htmlspecialchars(trim($data['username']));
 $email = htmlspecialchars(trim($data['email']));
 $password = htmlspecialchars(trim($data['password']));
-$confirmpassword = htmlspecialchars(trim($data['confirmPassword']));
+$confirmpassword = trim($data['confirmPassword']);
 
-
+$errors = [];
 
 if($password !== $confirmpassword){
     http_response_code(400);
@@ -43,31 +45,18 @@ if($password !== $confirmpassword){
     exit;
 }
 
-//file path
-$file = 'users.json';
+//check if username or email already exists
+$sql = "SELECT * FROM users WHERE username = :username OR email = :email";
+$stmt = $pdo->prepare($sql);
+$stmt->execute(['username' => $username, 'emal' => $email]);
+$existingUser= $stmt->fetch();
 
-//load existing data
-$users = [];
-
-// check if file exist
-if(file_exists($file)){
-    $json = file_get_contents($file);
-    $users =json_decode($json, true) ?? [];
-}else{
-    http_response_code(500);
-    echo json_encode(["errors" => ["server" => "User database cant be found"]]);
-    exit;
-};
-
-// At the top, define all error fields
-$errors = [];
-
-foreach($users as $user){
-    if($user['email'] === $email){
-        $errors["email"] = "Email already exists"; 
+if($existingUser){
+    if($existingUser['username'] === $username){
+        $errors['username'] = "username already exists";
     }
-    if($user['username'] === $username){
-        $errors['username'] = "Username already exists";
+    if($existingUser['email'] === $email){
+        $errors['email'] === "Email already exists";
     }
 }
 
@@ -78,24 +67,22 @@ if(!empty($errors)) { // if any error message is not empty
     exit;
 }
 
-//prepare to save data
-$userData = [
-    "name" => $name,
-    "username" => $username,
-    "email" => $email,
-    "password" => password_hash($password, PASSWORD_DEFAULT)
-];
+//HASH THE PASSWORD
+$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-//APPEND NEW USER DATA
-$users[] = $userData;
+$sql = "INSERT INTO users (full_name, username, email, password) VALUES (:name, :username, :email, :password)";
+$stmt = $pdo->prepare($sql);
 
-//save to file
-
-if(file_put_contents($file, json_encode($users, JSON_PRETTY_PRINT))){
-    http_response_code(200);
-    echo json_encode(["success" => "User successfully registered"]);
-} else{
+try{
+    $stmt->execute([
+        'name' => $name,
+        'username' => $username,
+        'email' => $email,
+        'password' => $hashedPassword
+    ]);
+    http_response_code(201);
+    echo json_encode(['success' => true]);
+} catch (PDOException $e){
     http_response_code(500);
-    echo json_encode(["errors" => ['server' => "Failed to save data"]]);
-    exit;
-};
+    echo json_encode(["errors" => ["server" => "Database error:" . $e->getMessage()]]);
+}
