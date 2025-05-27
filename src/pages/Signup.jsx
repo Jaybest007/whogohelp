@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function Signup() {
+    useEffect( ()=> {
+            document.title = "Sign up - WhoGoHelp";
+        }, []);    
     const navigate = useNavigate();
     const [formdata, setFormData] = useState({
         name: "",
@@ -64,7 +67,7 @@ function Signup() {
         }
 
         try {
-            const response = await fetch("https://whogohelp.free.nf/signup.php", {
+            const response = await fetch("https://whogohelp.free.nf/backend/signup.php", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

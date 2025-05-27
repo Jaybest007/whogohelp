@@ -1,16 +1,11 @@
 <?php 
 session_start();
-header("Access-Control-Allow-Origin: https://ideal-acorn-vj94vv9gr4pfwxvw-5173.app.github.dev");
-header("Access-Control-Allow-Credentials: true");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Content-Type: application/json");
-
 if($_SERVER["REQUEST_METHOD"] === "OPTIONS"){
     http_response_code(200);
     exit;
 }
 
+include 'db_connect';
 $data = json_decode(file_get_contents("php://input"), true);
 
 if($data === null){
@@ -25,49 +20,33 @@ if(!isset($data['email']) || !isset($data['password'])){
     exit;
 }
 
-$username = htmlspecialchars(strtolower(trim($data['email'])));
-$password = $data['password'];
-
-//let load json file
-$userFile = 'users.json';
+$email = htmlspecialchars(strtolower(trim($data['email'])));
+$password = trim($data['password']);
 
 
-if(!file_exists($userFile)){
-    http_response_code(500);
-    echo json_encode(["error" => "User database cant be found"]);
-    exit;
-};
+// Check if user exists by email only
+$sql = "SELECT * FROM users WHERE email = :email";
+$stmt = $pdo->prepare($sql);
+$stmt->execute(['email' => $email]);
+$existingUser = $stmt->fetch();
 
-$users = json_decode(file_get_contents($userFile), true);
-
-if (!is_array($users)) {
-    http_response_code(500);
-    echo json_encode(["error" => "User database is corrupted"]);
-    exit;
-}
-
-foreach($users as $user ){
-    if($user["email"] === $username && password_verify($password, $user['password'])){
-        // Set session with user info
+if($existingUser){
+    if(password_verify($password, $existingUser['password'])){
         $_SESSION['USER'] = [
-            'name' => $user['name'],
-            'username' => $user['username'],
-            'email' => $user['email']
+            'name' => $existingUser['full_name'],
+            'username' => $existingUser['username'],
+            'email' => $existingUser['email']
         ];
         http_response_code(200);
         echo json_encode(["success" => "Login successful"]);
         exit;
-    };
-    if($user["email"] === $username && !password_verify($password, $user['password'])){
+    } else {
         http_response_code(400);
         echo json_encode(["error" => "Incorrect password"]);
         exit;
     }
-};
+}
 http_response_code(400);
 echo json_encode(["error" => "Incorrect username or password"]);
 exit;
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);

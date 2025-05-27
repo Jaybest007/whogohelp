@@ -4,20 +4,19 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-
 const WelcomeHeader = () => {
 
-  const [user, setUser] = useState(null)
+  const [userInfo, setUserInfo] = useState(null)
   const navigate = useNavigate();
 
   useEffect(()=> {
-    fetch("https://whogohelp-backend.onrender.com/backend/session.php", {
+    fetch("https://whogohelp.free.nf/backend/user_session.php", {
       credentials: "include",
     })
     .then(res => res.json().catch(()=> ({})))
     .then(data => {
       if(data.loggedIn){
-        setUser(data.user);
+        setUserInfo(data.userInfo);
       } else{
         navigate("/login")
       }
@@ -29,7 +28,7 @@ const WelcomeHeader = () => {
   
   return (
     <div className="text-left py-15">
-      <h2 className="text-4xl text-orange-400 font-semibold">{user ? `Hey, ${user.name}` : "Loading session..."}</h2>
+      <h2 className="text-4xl text-orange-400 font-semibold">{user ? `Hey, ${userInfo.username}` : "Loading session..."}</h2>
       <p className="text-sm text-gray-300">Ready to run or get help with an errand?</p>
     </div>
   );

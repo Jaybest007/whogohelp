@@ -1,6 +1,9 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
  function Login(){
+    useEffect( ()=> {
+        document.title = "Login - WhoGoHelp";
+    }, []);
 
     const [loginData, setLoginData] = useState({
         email: "",
@@ -52,7 +55,7 @@ import { useNavigate } from 'react-router-dom';
 
        try{ 
              
-            const response = await fetch("https://whogohelp-backend.onrender.com/backend/login.php", {
+            const response = await fetch("https://whogohelp.free.nf/backend/login.php", {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
