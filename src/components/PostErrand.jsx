@@ -54,7 +54,7 @@ function PostErrand(){
         }
 
         try {
-            const response = await fetch("https://whogohelp-backend.onrender.com/backend/post_errand.php", {
+            const response = await fetch("https://whogohelp.free.nf/backend/login.php", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",                    
@@ -76,8 +76,8 @@ function PostErrand(){
 
             if(response.ok){
                 setError((error) => ({ ...error, server: "" }));
-                SetPosted(true);
                 setSuccess(data.success);
+                SetPosted(true);
             } else {
                 setError((error) => ({...error, server: data.error || "An error occurred"}));
                 console.log(data.error);   

@@ -1,13 +1,20 @@
 <?php
-header("Access-Control-Allow-Origin: https://ideal-acorn-vj94vv9gr4pfwxvw-5173.app.github.dev");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+// Handle preflight (OPTIONS) request early
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Methods: POST, OPTIONS");
+    header("Access-Control-Allow-Headers: Content-Type");
+    http_response_code(200);
+    exit();
+}
+
+// CORS and content headers for actual requests
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
-if($_SERVER["REQUEST_METHOD"] === "OPTIONS"){ // Fixed typo here
-    http_response_code(200);
-    exit;
-};
+include 'db_connect.php';
 
 $data = json_decode(file_get_contents("php://input"), true);
 
@@ -21,11 +28,10 @@ if(
     !isset($data['title']) ||
     !isset($data['description']) ||
     !isset($data['location']) ||
-    !isset($data['reward']) ||
-    !isset($data['notes'])
+    !isset($data['reward']) 
 ){
     http_response_code(400);
-    echo json_encode(["error" => ["server","All input is required"]]);
+    echo json_encode(["error" => ["server" => "All input is required"]]);
     exit;
 }
 
@@ -45,45 +51,31 @@ $date = date("d-m-y");
 $time = date("h:i A"); // Fixed double semicolon
 $errandID = generateOrderId();
 
-//file path
-$file = "errands.json";
 
-//load existing errands
-$errands = [];
-//let check if file exist
-if(file_exists($file)){
-    $json = file_get_contents($file);
-    $errands = json_decode($json, true) ?? [];
-}else{
-    http_response_code(400);
-    echo json_encode(["error" => ["server","Errand database cant be found"]]);
-    exit;
-};
+//let send data to databse
+$sql = "INSERT INTO errands (errand_Id, date, time, title, description, location, reward, notes) VALUES (:errandId, :date, :time, :title, :description, :location, :reward, :notes)";
+$stmt = $pdo->prepare($sql);
 
-//prepare to save data
-$userErrands =[
-    'errandId' => $errandID,
-    "date" => $date,
-    'time' => $time,
-    'title' => $title,
-    'description' => $description,
-    'location' => $location,
-    'reward' => $reward,
-    'notes' => $notes
-];
+try{
+    $stmt->execute([
+        'errandId' => $errandID,
+        'date' => $date,
+        'time' => $time,
+        'title' => $title,
+        'description' => $description,
+        'location' => $location,
+        'reward' => $reward,
+        'notes' => $notes,
+    ]);
 
-//append errand data
-$errands[] = $userErrands;
-
-//save to file
-if(file_put_contents($file, json_encode($errands, JSON_PRETTY_PRINT))){
-    http_response_code(200);
+    http_response_code(201);
     echo json_encode(["success" => true]);
-}else{
+} catch (PDOException $e) {
     http_response_code(500);
-    echo json_encode(["error" => ['server' =>"Failed to save data"]]); // Fixed key to "error"
-    exit;
+    echo json_encode(["errors" => ["server" => "Database error: " . $e->getMessage()]]);
 }
+
+
 
 
 

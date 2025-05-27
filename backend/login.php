@@ -5,7 +5,7 @@ if($_SERVER["REQUEST_METHOD"] === "OPTIONS"){
     exit;
 }
 
-include 'db_connect';
+include 'db_connect.php';
 $data = json_decode(file_get_contents("php://input"), true);
 
 if($data === null){

@@ -28,7 +28,9 @@ const WelcomeHeader = () => {
   
   return (
     <div className="text-left py-15">
-      <h2 className="text-4xl text-orange-400 font-semibold">{user ? `Hey, ${userInfo.username}` : "Loading session..."}</h2>
+      <h2 className="text-4xl text-orange-400 font-semibold">
+        {userInfo ? `Hey, ${userInfo.username}` : "Loading session..."}
+      </h2>
       <p className="text-sm text-gray-300">Ready to run or get help with an errand?</p>
     </div>
   );
