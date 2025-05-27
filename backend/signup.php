@@ -1,31 +1,31 @@
 <?php 
-header("Access-Control-Allow-Origin: https://ideal-acorn-vj94vv9gr4pfwxvw-5173.app.github.dev");
-header("Access-Control-Allow-Credentials: true");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Content-Type: application/json");
-include "db_connect.php";
-
-if($_SERVER["REQUEST_METHOD"] === "OPTIONS"){
+// Only handle preflight manually if needed
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
-    exit;
+    exit();
 }
+header("Content-Type: application/json");
+
+
+
+
+include "db_connect.php";
 
 $data = json_decode(file_get_contents("php://input"), true);
 
-if($data === null){
+if ($data === null) {
     http_response_code(400);
     echo json_encode(["errors" => ["server" => "All input is required"]]);
     exit;
 }
 
-if(
-!isset($data['name']) || 
-!isset($data['username']) || 
-!isset($data['email']) ||
-!isset($data['password']) ||
-!isset($data['confirmPassword'])
-){
+if (
+    !isset($data['name']) || 
+    !isset($data['username']) || 
+    !isset($data['email']) ||
+    !isset($data['password']) ||
+    !isset($data['confirmPassword'])
+) {
     http_response_code(400);
     echo json_encode(["errors" => ["server" => "All input is required"]]);
     exit;
@@ -39,41 +39,38 @@ $confirmpassword = trim($data['confirmPassword']);
 
 $errors = [];
 
-if($password !== $confirmpassword){
+if ($password !== $confirmpassword) {
     http_response_code(400);
     echo json_encode(["errors" => ["confirmPassword" => "Password doesn't match"]]);
     exit;
 }
 
-//check if username or email already exists
+// Check if username or email already exists
 $sql = "SELECT * FROM users WHERE username = :username OR email = :email";
 $stmt = $pdo->prepare($sql);
-$stmt->execute(['username' => $username, 'emal' => $email]);
-$existingUser= $stmt->fetch();
+$stmt->execute(['username' => $username, 'email' => $email]);  //  Fix typo: 'emal' -> 'email'
+$existingUser = $stmt->fetch();
 
-if($existingUser){
-    if($existingUser['username'] === $username){
-        $errors['username'] = "username already exists";
+if ($existingUser) {
+    if ($existingUser['username'] === $username) {
+        echo json_encode(["errors" => ["username" => "Username already exists"]]);
+        exit;
     }
-    if($existingUser['email'] === $email){
-        $errors['email'] === "Email already exists";
+    if ($existingUser['email'] === $email) {
+        echo json_encode(["errors" => ["email" => "Email already exists"]]);
+        exit;
     }
 }
 
-//if error is  found
-if(!empty($errors)) { // if any error message is not empty
-    http_response_code(409);
-    echo json_encode(["errors" => $errors]);
-    exit;
-}
 
-//HASH THE PASSWORD
+// Hash the password
 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
+// Insert into database
 $sql = "INSERT INTO users (full_name, username, email, password) VALUES (:name, :username, :email, :password)";
 $stmt = $pdo->prepare($sql);
 
-try{
+try {
     $stmt->execute([
         'name' => $name,
         'username' => $username,
@@ -81,8 +78,8 @@ try{
         'password' => $hashedPassword
     ]);
     http_response_code(201);
-    echo json_encode(['success' => true]);
-} catch (PDOException $e){
+    echo json_encode(['success' => "Signup successful"]);
+} catch (PDOException $e) {
     http_response_code(500);
-    echo json_encode(["errors" => ["server" => "Database error:" . $e->getMessage()]]);
+    echo json_encode(["errors" => ["server" => "Database error: " . $e->getMessage()]]);
 }
