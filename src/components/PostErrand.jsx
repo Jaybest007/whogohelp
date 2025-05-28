@@ -54,11 +54,12 @@ function PostErrand(){
         }
 
         try {
-            const response = await fetch("https://whogohelp.free.nf/backend/login.php", {
+            const response = await fetch("https://whogohelp.free.nf/backend/post_errand.php", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",                    
                 },
+                credentials: "include",
                 body: JSON.stringify(errandData)
             });
 
