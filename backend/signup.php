@@ -6,9 +6,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 header("Content-Type: application/json");
 
-
-
-
 include "db_connect.php";
 
 $data = json_decode(file_get_contents("php://input"), true);
@@ -36,6 +33,7 @@ $username = htmlspecialchars(trim($data['username']));
 $email = htmlspecialchars(trim($data['email']));
 $password = htmlspecialchars(trim($data['password']));
 $confirmpassword = trim($data['confirmPassword']);
+$created_at = date("Y-m-d H:i:s");
 
 $errors = [];
 
@@ -67,7 +65,7 @@ if ($existingUser) {
 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
 // Insert into database
-$sql = "INSERT INTO users (full_name, username, email, password) VALUES (:name, :username, :email, :password)";
+$sql = "INSERT INTO users (full_name, username, email, password, created_at) VALUES (:name, :username, :email, :password, created_at)";
 $stmt = $pdo->prepare($sql);
 
 try {
@@ -75,7 +73,8 @@ try {
         'name' => $name,
         'username' => $username,
         'email' => $email,
-        'password' => $hashedPassword
+        'password' => $hashedPassword,
+        'created_at' => $created_at
     ]);
     http_response_code(201);
     echo json_encode(['success' => "Signup successful"]);

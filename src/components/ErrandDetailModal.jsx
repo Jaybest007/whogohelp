@@ -3,6 +3,13 @@ import React from 'react';
 const ErrandDetailModal = ({ errand, onClose, onAccept }) => {
   if (!errand) return null;
 
+  function onAccept() {
+    
+  }
+  function onclose(){
+
+  }
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4">
       <div className="bg-gray-900 border border-orange-400 p-6 rounded-md w-full max-w-md">

@@ -18,7 +18,7 @@ function Signup() {
     const [success, setSuccess] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[^\s]{8,}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9])[^\s]{8,}$/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     function handleInputChange(event) {
