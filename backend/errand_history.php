@@ -19,6 +19,7 @@ if(!isset($_SESSION['USER'])){
 };
 
 $action = $_GET['action'] ?? null;
+$errand_Id = $_GET['errand_Id'] ?? null;
 
 switch($action){
     case 'global_pending':
@@ -37,6 +38,10 @@ switch($action){
         getErrandCompleted($pdo);
         break;
     
+    case 'status_progress':
+        changeStatus_progress($pdo);
+        break;
+
     default:
         http_response_code(400);
         echo json_encode(["error" => "Invalid action"]); 
@@ -137,6 +142,30 @@ function getErrandCompleted($pdo){
         } else {
             http_response_code(200);
             echo json_encode([]);
+        }
+    } catch (PDOException $e) {
+        http_response_code(500);
+        echo json_encode(["error" => "Database query failed", "details" => $e->getMessage()]);
+        exit;
+    }
+}
+
+function changeStatus_progress($pdo){
+    $status = "progress" ; 
+    $errand_Id = $_GET['errand_Id'];
+
+    try {
+        $sql = "UPDATE `errands` SET `status` = :status WHERE `errand_Id` = :errand_Id ";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['errand_Id' => $errand_Id, 'status' => $status]);
+       
+        if ($stmt ->rowCount() > 0) {
+            http_response_code(200);
+            echo json_encode(["success" => true, "message", "Errand accepted"]);
+            
+        } else {
+            http_response_code(200);
+            echo json_encode(["success" => false, "message" => "Errand was'nt accepted"]);
         }
     } catch (PDOException $e) {
         http_response_code(500);
