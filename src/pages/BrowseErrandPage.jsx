@@ -5,7 +5,7 @@ import ErrandCard from '../components/ErrandCard';
 import BottomNav from '../components/BottomNav';
 
 
-const errands = [];
+
 
 const BrowseErrandsPage = () => {
 
@@ -13,7 +13,7 @@ const BrowseErrandsPage = () => {
   const [error, setError] = useState("");
 
   useEffect( () => {
-    axios.get("https://whogohelp.free.nf/backend/errand_history.php",{
+    axios.get("https://whogohelp.free.nf/backend/errand_history.php?action=global_pending",{
       withCredentials: true
     })
     .then(response => {
@@ -25,16 +25,6 @@ const BrowseErrandsPage = () => {
     });
   },[]);
 
-  const availableErrands = data.filter(errand => errand.status === "up for grabs");
-
-  if (error){
-    return <div className ="text-red-500">{error}</div>;
-  }
-
-  if (availableErrands.length > 0){
-    return <div className ="text-red-500">No available order right now</div>;
-  }
-
 
  
   return (
@@ -44,12 +34,15 @@ const BrowseErrandsPage = () => {
         <span className='mr-2'>Filter Errand by:</span>
         <select name="Filter Option" id="" className='bg-black text-white rounded border-1 border-orange-400 focus:bg-orange-200'>
             <option value="Location">Location</option>
-            <option value="Community">Community-based filterin</option>
+            <option value="Community">Community-based filtering</option>
         </select>
       </div>
  
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {availableErrands.map(errand => (
+        {data.length === 0 && !error && (
+          <div className="text-gray-400">No errands found.</div>
+        )}
+        {data.map(errand => (
           <ErrandCard key={errand.errand_Id} {...errand} />
         ))}
       </div>

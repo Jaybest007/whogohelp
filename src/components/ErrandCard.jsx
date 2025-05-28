@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-const ErrandCard = ({ errand_id, title, location, reward, status }) => {
+const ErrandCard = ({ errand_Id, title, location, reward, status }) => {
 
   
   return (
@@ -10,7 +10,7 @@ const ErrandCard = ({ errand_id, title, location, reward, status }) => {
       <p className="text-sm text-gray-300 mt-1">Location: <span className="font-medium">{location}</span></p>
       <div className="mt-3 text-sm text-gray-400 flex justify-between">
         <span className="font-semibold">{reward}</span>
-        <span className="italic">#ID: {errand_id}</span>
+        <span className="italic">#ID: {errand_Id}</span>
       </div>
       <p className='bg-amber-500 w-30 font-medium rounded p-1 text-sm text-black mt-1'>Status: {status}</p>
       <button

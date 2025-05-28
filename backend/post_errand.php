@@ -58,7 +58,7 @@ $location = htmlspecialchars(trim($data['location']));
 $reward = htmlspecialchars(trim($data['reward']));
 $notes = htmlspecialchars(trim($data['notes']));
 $posted_by = $_SESSION['USER']['username'];
-$status = "up for grabs";
+$status = "pending";
 
 
 //let send data to databse

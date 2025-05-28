@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { data } from 'autoprefixer';
 import OngoingErrands from './OngoingErrands';
 
 
@@ -10,7 +9,7 @@ const ErrandHistory = () => {
   const [error, setError] = useState("");
 
   useEffect (() => {
-    axios.get('https://whogohelp.free.nf/backend/errand_history.php',{
+    axios.get('https://whogohelp.free.nf/backend/errand_history.php?action=completed',{
       withCredentials: true
     })
     .then (response => {
@@ -23,15 +22,6 @@ const ErrandHistory = () => {
 
   }, [])
 
-  const completedErrands = data.filter([errand => errand.status === "job done"]);
-
-  if (error){
-     return <div className ="text-red-500">{error}</div>;
-  }
-  if (completedErrands.length === 0){
-   return <div className ="text-red-500">You have no past order</div>;
-  }
-
   return (
     <div className="mt-4">
       <h3 className="text-md font-semibold text-orange-400 mb-2">Recent Errands</h3>
@@ -40,8 +30,8 @@ const ErrandHistory = () => {
         {data.length === 0 && !error && (
           <div className="text-gray-400">No errands found.</div>
         )}
-        {completedErrands.map((errand, idx) => (
-          <div key={errand.errand_id || idx} className="bg-gray-900 p-3 rounded-lg text-sm">
+        {data.map((errand, idx) => (
+          <div key={errand.errand_Id || idx} className="bg-gray-900 p-3 rounded-lg text-sm">
             <p className="text-white">📦 {errand.title} - {errand.reward}</p>
             <p className="text-gray-400 text-xs">{errand.status} • {errand.date}</p>
           </div>
