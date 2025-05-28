@@ -1,15 +1,42 @@
 import React from 'react';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
 import ErrandCard from '../components/ErrandCard';
 import BottomNav from '../components/BottomNav';
 
 
-const errands = [
-  { id: 1, title: "Buy groceries", location: "Ikeja", reward: "₦500", status: "Pending" },
-  { id: 2, title: "Pick up laundry", location: "Yaba", reward: "₦300" , status: "Pending" },
-  { id: 3, title: "Pick up food", location: "Ikota", reward: "₦1,200", status: "Pending" },
-];
+const errands = [];
 
 const BrowseErrandsPage = () => {
+
+  const [data, setData] = useState([]);
+  const [error, setError] = useState("");
+
+  useEffect( () => {
+    axios.get("https://whogohelp.free.nf/backend/errand_history.php",{
+      withCredentials: true
+    })
+    .then(response => {
+      setData(response.data);
+    })
+    .catch(error =>{
+      setError("Could not load errand history.");
+      console.error('Error:', error);
+    });
+  },[]);
+
+  const availableErrands = data.filter(errand => errand.status === "up for grabs");
+
+  if (error){
+    return <div className ="text-red-500">{error}</div>;
+  }
+
+  if (availableErrands.length > 0){
+    return <div className ="text-red-500">No available order right now</div>;
+  }
+
+
+ 
   return (
     <div className="browse-page bg-black text-white min-h-screen p-4 pb-14">
       <h2 className="text-2xl font-bold text-orange-500 my-6 py-10">Available Errands</h2>
@@ -20,9 +47,10 @@ const BrowseErrandsPage = () => {
             <option value="Community">Community-based filterin</option>
         </select>
       </div>
+ 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {errands.map(errand => (
-          <ErrandCard key={errand.id} {...errand} />
+        {availableErrands.map(errand => (
+          <ErrandCard key={errand.errand_Id} {...errand} />
         ))}
       </div>
 

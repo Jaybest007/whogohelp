@@ -18,7 +18,6 @@ header("Access-Control-Allow-Credentials: true");
 header("Content-Type: application/json");
 
 if(!isset($_SESSION['USER'])){
-    http_response_code(401); // Unauthorized
     echo json_encode(["error" => ["server" => "Login is required!!..Kindly login to post"]]);
     exit;
 };
@@ -58,12 +57,12 @@ $description = htmlspecialchars(trim($data['description']));
 $location = htmlspecialchars(trim($data['location']));
 $reward = htmlspecialchars(trim($data['reward']));
 $notes = htmlspecialchars(trim($data['notes']));
-$createdBy = $_SESSION['USER']['username'];
-
+$posted_by = $_SESSION['USER']['username'];
+$status = "up for grabs";
 
 
 //let send data to databse
-$sql = "INSERT INTO errands (errand_Id, date, time, title, description, location, reward, notes, created_by) VALUES (:errandId, :date, :time, :title, :description, :location, :reward, :notes, :created_by)";
+$sql = "INSERT INTO errands (errand_Id, date, time, title, description, location, reward, notes, posted_by, status) VALUES (:errandId, :date, :time, :title, :description, :location, :reward, :notes, :posted_by, :status)";
 $stmt = $pdo->prepare($sql);
 
 try{
@@ -76,7 +75,8 @@ try{
         'location' => $location,
         'reward' => $reward,
         'notes' => $notes,
-        'created_by' => $createdBy
+        'posted_by' => $posted_by,
+        'status' => $status
     ]);
 
     http_response_code(201);

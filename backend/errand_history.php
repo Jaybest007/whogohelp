@@ -11,12 +11,6 @@ if($_SERVER['REQUEST_METHOD'] === 'OPTIONS'){
     exit;
 }
 
-if (!isset($pdo)) {
-    http_response_code(500);
-    echo json_encode(["error" => "Database connection not established"]);
-    exit;
-}
-
 //check if user session is set
 if(!isset($_SESSION['USER'])){
     http_response_code(401);
@@ -24,12 +18,12 @@ if(!isset($_SESSION['USER'])){
     exit;
 };
 
-$createdBy = $_SESSION['USER']['username'];
+$postedBy = $_SESSION['USER']['username'];
 
 try {
-    $sql = "SELECT * FROM errands WHERE created_by = :createdBy";
+    $sql = "SELECT * FROM `errands` WHERE `posted_by` = :posted_by";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute(['createdBy' => $createdBy]);
+    $stmt->execute(['posted_by' => $postedBy]);
     $errands = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     if ($errands && count($errands) > 0) {
