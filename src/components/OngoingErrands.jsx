@@ -32,7 +32,7 @@ const OngoingErrands = () => {
           <div className="text-gray-400">No errands found.</div>
         )}
       {data.map((errand, index) => (
-        <div key={errand.errand_Id || index} className="bg-gray-800 p-3 rounded-lg text-sm">
+        <div key={errand.errand_Id || index} className="bg-gray-800 p-3 rounded-lg text-sm pb-2">
           <p className="font-semibold text-white">📦 {errand.title}</p>
           <p className="text-gray-400">{errand.location} → Lekki • {errand.status}</p>
         </div>

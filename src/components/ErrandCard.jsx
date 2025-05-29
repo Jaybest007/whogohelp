@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ErrandDetailModal from './ErrandDetailModal.jsx';
 import axios from 'axios';
 
-const ErrandCard = ({ errand_Id, title, location, reward, status }) => {
+const ErrandCard = ({ errand_Id, title, location, description, reward, status, refreshList }) => {
   const [selectedErrands, setSelectedErrands] = useState(null);
   const [currentStatus, setCurrentStatus] = useState(status);
   const [loading, setLoading] = useState(false);
@@ -18,6 +18,7 @@ const ErrandCard = ({ errand_Id, title, location, reward, status }) => {
       });
       if (response.data && response.data.success) {
         setCurrentStatus('progress');
+        refreshList();
       }
     } catch (error) {
       console.log(error);

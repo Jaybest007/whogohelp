@@ -8,6 +8,8 @@ const Dashboard = lazy(() => import('./pages/Dashboard'));
 const WithNavbar = lazy(() => import('./layouts/WithNavbar'));
 const Profile = lazy(() => import('./pages/Profile'));
 const BrowseErrandsPage = lazy(() => import('./pages/BrowseErrandPage'));
+const Logout = lazy(() => import('./utilities/Logout'));
+const PageNotFound = lazy(() => import('./utilities/PageNotFound'));
 
 function App() {
     return (
@@ -26,6 +28,9 @@ function App() {
                     {/* Pages with no navbar */}
                     <Route path='/signup' element={<Signup />} />
                     <Route path='/login' element={<Login />} />
+                    <Route path="/logout" element={<Logout/>} />
+
+                    <Route path='*' element={<PageNotFound/>}/>
                 </Routes>
             </Suspense>
         </BrowserRouter>

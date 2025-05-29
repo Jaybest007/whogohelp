@@ -24,7 +24,7 @@ const ErrandHistory = () => {
 
   return (
     <div className="mt-4">
-      <h3 className="text-md font-semibold text-orange-400 mb-2">Recent Errands</h3>
+      <h3 className="text-md font-semibold text-orange-400 mb-2">Completed Errands</h3>
       <div className="space-y-2">
         {error && <div className="text-red-500">{error}</div>}
         {data.length === 0 && !error && (

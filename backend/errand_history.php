@@ -102,12 +102,13 @@ function getErrandPending($pdo){
 
 function getErrandInProgress($pdo){
     $postedBy = $_SESSION['USER']['username'];
+    $accepted_by = $_SESSION['USER']['username'];
     $status = "progress" ;
 
     try {
-        $sql = "SELECT * FROM `errands` WHERE `posted_by` = :posted_by AND `status` = :status";
+        $sql = "SELECT * FROM `errands` WHERE (`posted_by` = :posted_by OR `accepted_by` = :accepted_by) AND `status` = :status";
         $stmt = $pdo->prepare($sql);
-        $stmt->execute(['posted_by' => $postedBy, 'status' => $status]);
+        $stmt->execute(['posted_by' => $postedBy, 'accepted_by' => $accepted_by, 'status' => $status]);
         $errands = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if ($errands && count($errands) > 0) {
@@ -127,12 +128,13 @@ function getErrandInProgress($pdo){
 
 function getErrandCompleted($pdo){
     $postedBy = $_SESSION['USER']['username'];
+    $accepted_by = $_SESSION['USER']['username'];
     $status = "completed" ;
 
     try {
-        $sql = "SELECT * FROM `errands` WHERE `posted_by` = :posted_by AND `status` = :status";
+        $sql = "SELECT * FROM `errands` WHERE (`posted_by` = :posted_by OR `accepted_by` = :accepted_by) AND `status` = :status";
         $stmt = $pdo->prepare($sql);
-        $stmt->execute(['posted_by' => $postedBy, 'status' => $status]);
+        $stmt->execute(['posted_by' => $postedBy, 'accepted_by' => $accepted_by, 'status' => $status]);
         $errands = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if ($errands && count($errands) > 0) {
@@ -151,17 +153,18 @@ function getErrandCompleted($pdo){
 }
 
 function changeStatus_progress($pdo){
-    $status = "progress" ; 
+    $status = "progress";
     $errand_Id = $_GET['errand_Id'];
+    $accepted_by = $_SESSION['USER']['username'];
 
     try {
-        $sql = "UPDATE `errands` SET `status` = :status WHERE `errand_Id` = :errand_Id ";
+        $sql = "UPDATE `errands` SET `status` = :status, `accepted_by` = :accepted_by WHERE `errand_Id` = :errand_Id";
         $stmt = $pdo->prepare($sql);
-        $stmt->execute(['errand_Id' => $errand_Id, 'status' => $status]);
+        $stmt->execute(['errand_Id' => $errand_Id, 'accepted_by' => $accepted_by, 'status' => $status]);
        
         if ($stmt ->rowCount() > 0) {
             http_response_code(200);
-            echo json_encode(["success" => true, "message", "Errand accepted"]);
+            echo json_encode(["success" => true, "message" => "Errand accepted"]);
             
         } else {
             http_response_code(200);
