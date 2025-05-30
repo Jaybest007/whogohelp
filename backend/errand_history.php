@@ -42,6 +42,10 @@ switch($action){
         changeStatus_progress($pdo);
         break;
 
+    case 'status_completed':
+        changeStatus_completed($pdo);
+        break;
+
     default:
         http_response_code(400);
         echo json_encode(["error" => "Invalid action"]); 
@@ -130,6 +134,7 @@ function getErrandCompleted($pdo){
     $postedBy = $_SESSION['USER']['username'];
     $accepted_by = $_SESSION['USER']['username'];
     $status = "completed" ;
+    
 
     try {
         $sql = "SELECT * FROM `errands` WHERE (`posted_by` = :posted_by OR `accepted_by` = :accepted_by) AND `status` = :status";
@@ -169,6 +174,31 @@ function changeStatus_progress($pdo){
         } else {
             http_response_code(200);
             echo json_encode(["success" => false, "message" => "Errand was'nt accepted"]);
+        }
+    } catch (PDOException $e) {
+        http_response_code(500);
+        echo json_encode(["error" => "Database query failed", "details" => $e->getMessage()]);
+        exit;
+    }
+}
+
+function changeStatus_completed($pdo){
+    $status = "completed";
+    $errand_Id = $_GET['errand_Id'];
+    $accepted_by = $_SESSION['USER']['username'];
+
+    try {
+        $sql = "UPDATE `errands` SET `status` = :status, `accepted_by` = :accepted_by WHERE `errand_Id` = :errand_Id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['errand_Id' => $errand_Id, 'accepted_by' => $accepted_by, 'status' => $status]);
+       
+        if ($stmt ->rowCount() > 0) {
+            http_response_code(200);
+            echo json_encode(["success" => true, "message" => "Errand completed"]);
+            
+        } else {
+            http_response_code(200);
+            echo json_encode(["success" => false, "message" => "Errand was'nt completed"]);
         }
     } catch (PDOException $e) {
         http_response_code(500);

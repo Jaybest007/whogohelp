@@ -28,6 +28,8 @@ const ErrandCard = ({ errand_Id, title, location, description, reward, status, r
     }
   };
 
+  
+
   return (
     <div className="errand-card bg-gray-900 border border-orange-500 rounded-lg p-4 shadow-md hover:scale-[1.02] transition">
       <h3 className="text-xl font-semibold text-orange-400">{title}</h3>

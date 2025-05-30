@@ -1,24 +1,98 @@
-import React from "react";
-import {Link } from "react-router-dom";
-import { FaPowerOff } from "react-icons/fa";
-
-
-
+import React, { useEffect, useState } from "react";
+import { data, Link } from "react-router-dom";
+import { FaPowerOff, FaBars } from "react-icons/fa";
+import axios from "axios";
 
 function Navbar() {
+    const [menuOpen, setMenuOpen] = useState(false);
+    const [loggedIn, setLoggedIn] = useState(false);
 
-    return(
-        <nav className="navbar fixed w-full">
-            <ul className="flex p-4 bg-orange-500 text-white items-center justify-left">
-                <Link to="/" className=" p-2 text-2xl font-bold hover:bg-orange-600">WhoGoHelp</Link>
-                <Link to="/Login" className=" p-2 hover:bg-orange-600">Login</Link>
-                <Link to="/Signup" className=" p-2 hover:bg-orange-600">Sign Up</Link>
-                <Link to="/dashboard" className=" p-2 hover:bg-orange-600">Dashboard</Link>
-                <Link to="/Logout"  className=" p-2 hover:bg-orange-600"><FaPowerOff /></Link>
-                
-            
-            </ul>
+    useEffect ( () => {
+
+        axios.get('https://whogohelp.free.nf/backend/user_session.php', {
+            withCredentials: true
+        })
+        .then ( response => {
+            setLoggedIn(response.loggedIn);
+        })
+        .catch (err => {
+            console.log(err);
+        }) 
+
+    },[]);
+
+    return (
+        <nav className="navbar fixed w-full bg-orange-500 text-white z-50">
+            <div className="flex items-center justify-between p-2">
+                <Link to="/" className="text-2xl font-bold hover:bg-orange-600 p-2 rounded">
+                    WhoGoHelp
+                </Link>
+                {/* Hamburger menu for mobile */}
+                <button
+                    className="md:hidden p-2 focus:outline-none"
+                    onClick={() => setMenuOpen(!menuOpen)}
+                    aria-label="Toggle menu"
+                >
+                    <FaBars size={24} />
+                </button>
+                {/* Desktop menu */}
+                <ul className="hidden md:flex space-x-2 items-center">
+                    {!loggedIn && (
+                    <li>
+                        <Link to="/Login" className="block p-2 hover:bg-orange-600 rounded" onClick={() => setMenuOpen(false)}>Login</Link>
+                    </li>
+                    )}
+                    {!loggedIn && (
+                    <li>
+                        <Link to="/Signup" className="p-2 hover:bg-orange-600 rounded">Sign Up</Link>
+                    </li>
+)}
+                    {loggedIn && (
+                    <li>
+                        <Link to="/dashboard" className="block p-2 hover:bg-orange-600 rounded" onClick={() => setMenuOpen(false)}>Dashboard</Link>
+                    </li>
+                    )}
+                    
+                    {loggedIn && (
+                    <li>
+                        <Link to="/Logout" className="block p-2 hover:bg-orange-600 rounded" onClick={() => setMenuOpen(false)}>
+                            <FaPowerOff />
+                        </Link>
+                    </li>
+                    )}
+                    )}
+                </ul>
+            </div>
+            {/* Mobile menu */}
+            {menuOpen && (
+                <ul className="md:hidden flex flex-col bg-orange-500 px-4 pb-4 space-y-2">
+                    {!loggedIn && (
+                    <li>
+                        <Link to="/Login" className="block p-2 hover:bg-orange-600 rounded" onClick={() => setMenuOpen(false)}>Login</Link>
+                    </li>
+                    )}
+                    {!loggedIn && (
+                    <li>
+                        <Link to="/Signup" className="p-2 hover:bg-orange-600 rounded">Sign Up</Link>
+                    </li>
+)}
+                    {loggedIn && (
+                    <li>
+                        <Link to="/dashboard" className="block p-2 hover:bg-orange-600 rounded" onClick={() => setMenuOpen(false)}>Dashboard</Link>
+                    </li>
+                    )}
+                    
+                    {loggedIn && (
+                    <li>
+                        <Link to="/Logout" className="block p-2 hover:bg-orange-600 rounded" onClick={() => setMenuOpen(false)}>
+                            <FaPowerOff />
+                        </Link>
+                    </li>
+                    )}
+                </ul>
+            )}
         </nav>
-    )
+    );
 }
+
 export default Navbar;

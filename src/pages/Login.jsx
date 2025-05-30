@@ -93,7 +93,7 @@ import { useNavigate } from 'react-router-dom';
     
     return(
         <div className="container p-5 justify-center flex items-center min-h-screen ">
-            <div className="wrapper rounded-2xl w-4xl h-auto bg-orange-500 p-10">
+            <div className="wrapper rounded-2xl w-4xl h-auto bg-orange-500 p-10 shadow-lg md:w-1/4 shadow-lg">
                 <h1 className=" font-bold text-4xl text-white mb-5 underline underline-offset-4">Login</h1> 
                 <p className='text-black text-l mb-2 italic '>{error}</p>
                 <p className='text-black text-l mb-2 italic '>{success}</p>

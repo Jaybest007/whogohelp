@@ -11,7 +11,7 @@ const Logout = () => {
         axios.get("https://whogohelp.free.nf/backend/logout.php", {
             withCredentials: true})
             .then(() => {
-                navigate("/login");
+                navigate("/");
             })
             .catch((err) => {
                 console.error("logout failed", err);
