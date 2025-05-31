@@ -7,7 +7,7 @@ import ErrandDetailModal from './ErrandDetailModal';
 
 const OngoingErrands = () => {
 
-  const [data, setData] = useState([])
+  const [data, setData] = useState([]);
   const [error, setError] = useState("");
   const [selectedErrand, setSelectedErrand] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -72,7 +72,7 @@ const OngoingErrands = () => {
           errand={selectedErrand}
           onClose={() => setSelectedErrand(null)}
           onCompleted={handleCompleted}
-          
+          loading={loading}
         />
       )}
     </div>

@@ -23,12 +23,7 @@ const ErrandDetailModal = ({ errand, onClose, onAccept, onCompleted, loading }) 
           </Link>
         )}
         <div className="mt-4 flex justify-end gap-2">
-          <button
-            onClick={onClose}
-            className="text-white border border-gray-500 px-3 py-1 rounded hover:bg-gray-700"
-          >
-            Close
-          </button>
+          
           {errand.status === "pending" && (
             <button
               onClick={onAccept}
@@ -47,6 +42,12 @@ const ErrandDetailModal = ({ errand, onClose, onAccept, onCompleted, loading }) 
               {loading ? "Completing..." : "Complete Errand"}
             </button>
           )}
+          <button
+            onClick={onClose}
+            className="text-white border border-gray-500 px-3 py-1 rounded hover:bg-gray-700"
+          >
+            Close
+          </button>
         </div>
       </div>
     </div>
