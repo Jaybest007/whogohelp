@@ -122,6 +122,7 @@ function Signup() {
                             placeholder="Enter full name"
                             value={formdata.name}
                             onChange={handleInputChange}
+                            autoComplete='off'
                         />
                     </label>
                     {error.name && <p className="text-black italic">{error.name}</p>}
@@ -135,6 +136,7 @@ function Signup() {
                             placeholder="Enter a valid Username"
                             value={formdata.username}
                             onChange={handleInputChange}
+                            autoComplete='off'
                         />
                     </label>
                     {error.username && <p className="text-black italic">{error.username}</p>}
@@ -148,6 +150,7 @@ function Signup() {
                             placeholder="Enter a valid Email"
                             value={formdata.email}
                             onChange={handleInputChange}
+                            autoComplete='off'
                         />
                     </label>
                     {error.email && <p className="text-black italic">{error.email}</p>}
@@ -161,6 +164,7 @@ function Signup() {
                             placeholder="Password"
                             value={formdata.password}
                             onChange={handleInputChange}
+                            autoComplete='off'
                         />
                     </label>
                     {error.password && <p className="text-black italic">{error.password}</p>}
@@ -174,6 +178,7 @@ function Signup() {
                             placeholder="Confirm Password"
                             value={formdata.confirmPassword}
                             onChange={handleInputChange}
+                            autoComplete='off'
                         />
                     </label>
                     {error.confirmPassword && <p className="text-black italic">{error.confirmPassword}</p>}

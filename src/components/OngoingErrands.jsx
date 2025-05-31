@@ -64,14 +64,17 @@ const OngoingErrands = () => {
         onClick={() => setSelectedErrand(errand)}
         >
           <p className="font-semibold text-white">📦 {errand.title}</p>
-          <p className="text-gray-400">{errand.location} → Lekki • {errand.status}</p>
+          <p className="text-gray-400">{errand.pick_up_location} → {errand.drop_off_location} • {errand.status}</p>
         </div>
       ))}
-      <ErrandDetailModal 
-        errand={selectedErrand}
-        onClose={() => setSelectedErrand(null)}
-        onCompleted={handleCompleted}
-      />
+      {selectedErrand && (
+        <ErrandDetailModal 
+          errand={selectedErrand}
+          onClose={() => setSelectedErrand(null)}
+          onCompleted={handleCompleted}
+          
+        />
+      )}
     </div>
   );
 };

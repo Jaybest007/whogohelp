@@ -41,7 +41,7 @@ const ErrandCard = ({ errand_Id, title, location, description, reward, status, r
       <p className='bg-amber-500 w-32 font-medium rounded p-1 text-sm text-black mt-1'>Status: {currentStatus}</p>
       <button
         className="mt-4 w-full bg-orange-500 hover:bg-orange-600 text-black font-semibold py-2 rounded cursor-pointer"
-        onClick={() => setSelectedErrands({ errand_Id, title, location, reward, status: currentStatus })}
+        onClick={() => setSelectedErrands({ errand_Id, title, pick_up_location, drop_off_location, reward, status: currentStatus })}
       >
         View Details
       </button>

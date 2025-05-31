@@ -10,13 +10,14 @@ const ErrandDetailModal = ({ errand, onClose, onAccept, onCompleted, loading }) 
       <div className="bg-gray-900 border border-orange-400 p-6 rounded-md w-full max-w-md">
         <h2 className="text-xl text-orange-500 font-bold mb-2">{errand?.title}</h2>
         <p className="text-sm text-white mb-2">Description: {errand?.description}</p>
-        <p className="text-sm text-gray-400">Location: {errand?.location}</p>
+        <p className="text-sm text-gray-400">Location: {errand?.pick_up_location}</p>
+        <p className="text-sm text-gray-400">Location: {errand?.drop_off_location}</p>
         <p className="text-sm text-gray-400">Reward: {errand?.reward }</p>
-        <Link to="/profile" ><p className="text-sm text-gray-400">{errand?.created_by}</p></Link>
-        <Link to="/profile" ><p className="text-sm text-gray-400">{errand?.posted_by}</p></Link>
+        <Link to="/profile" ><p className="text-sm text-gray-400">Pick-up location: {errand?.created_by}</p></Link>
+        <Link to="/profile" ><p className="text-sm text-gray-400">Drop-Off location: {errand?.posted_by}</p></Link>
         <div className="mt-4 flex justify-end gap-2">
           <button onClick={onClose} className="text-white border border-gray-500 px-3 py-1 rounded hover:bg-gray-700">
-            Cancel
+            Close
           </button>
           {errand.status === "pending" && ( 
             <button
@@ -29,7 +30,7 @@ const ErrandDetailModal = ({ errand, onClose, onAccept, onCompleted, loading }) 
           )}
 
           {/* for Complete order */}
-         {errand.status === "accepted" && (
+         {errand.status === "progress" && (
            <button
             onClick={onCompleted}
             disabled={loading}

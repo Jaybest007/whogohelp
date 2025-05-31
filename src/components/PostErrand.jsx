@@ -43,8 +43,8 @@ function PostErrand(){
         const newError ={
             title: title.trim() ? "" : "Title cant be empty",
             description: description.trim() ? "" : "Description cant be empty",
-            pickUplocation: pickUpLocation.trim() ? "" : "Pick up Location is required",
-            dropOfflocation: dropOffLocation.trim() ? "" : "Drop off location is required",
+            pickUpLocation: pickUpLocation.trim() ? "" : "Pick up Location is required",
+            dropOffLocation: dropOffLocation.trim() ? "" : "Drop off location is required",
             reward: reward.trim() ? "" : "Reward is required",
         }
         setError(newError)
