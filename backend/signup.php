@@ -33,7 +33,7 @@ $username = htmlspecialchars(trim($data['username']));
 $email = htmlspecialchars(trim($data['email']));
 $password = htmlspecialchars(trim($data['password']));
 $confirmpassword = trim($data['confirmPassword']);
-$created_at = date("Y-m-d H:i:s");
+$created_at = date("d-m-y H:i:s" ); // Use current date and time for created_at
 
 $errors = [];
 

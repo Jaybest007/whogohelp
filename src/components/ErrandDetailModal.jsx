@@ -29,14 +29,14 @@ const ErrandDetailModal = ({ errand, onClose, onAccept, onCompleted, loading }) 
           )}
 
           {/* for Complete order */}
-         {errand.status === "completed" && (
+         {errand.status === "accepted" && (
            <button
             onClick={onCompleted}
-            className="text-white border border-lime-400 px-3 py-1 rounded hover:bg-lime-600"
+            disabled={loading}
+            className={`text-white border border-lime-400 px-3 py-1 rounded hover:bg-lime-600 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
-            Complete Errand
+            {loading ? "Completing..." : "Complete Errand"}
           </button>
-
          )}
           
         </div>

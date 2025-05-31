@@ -34,6 +34,9 @@ const BrowseErrandsPage = () => {
             <option value="Community">Community-based filtering</option>
         </select>
       </div>
+      {error && (
+        <div className="text-red-400 mb-2">{error}</div>
+      )}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {data.length === 0 && !error && (
           <div className="text-gray-400">No errands found.</div>
@@ -47,6 +50,7 @@ const BrowseErrandsPage = () => {
             reward={errand.reward}
             status={errand.status}
             description={errand.description}
+            refreshList={fetchErrands} // <-- Add this line
           />
         ))}
       </div>

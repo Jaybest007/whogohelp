@@ -53,6 +53,7 @@ const OngoingErrands = () => {
   return (
     <div>
       <h3 className="text-md font-semibold text-orange-400 mb-2">Ongoing Errands</h3>
+      {error && <div className="text-red-400">{error}</div>}
       {data.length === 0 && !error && (
           <div className="text-gray-400">No errands found.</div>
         )}
