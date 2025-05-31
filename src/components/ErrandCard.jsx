@@ -2,7 +2,16 @@ import React, { useState } from 'react';
 import ErrandDetailModal from './ErrandDetailModal.jsx';
 import axios from 'axios';
 
-const ErrandCard = ({ errand_Id, title, location, description, reward, status, refreshList }) => {
+const ErrandCard = ({
+  errand_Id,
+  title,
+  pick_up_location,
+  drop_off_location,
+  description,
+  reward,
+  status,
+  refreshList
+}) => {
   const [selectedErrands, setSelectedErrands] = useState(null);
   const [currentStatus, setCurrentStatus] = useState(status);
   const [loading, setLoading] = useState(false);
@@ -28,12 +37,12 @@ const ErrandCard = ({ errand_Id, title, location, description, reward, status, r
     }
   };
 
-  
-
   return (
     <div className="errand-card bg-gray-900 border border-orange-500 rounded-lg p-4 shadow-md hover:scale-[1.02] transition">
       <h3 className="text-xl font-semibold text-orange-400">{title}</h3>
-      <p className="text-sm text-gray-300 mt-1">Location: <span className="font-medium">{location}</span></p>
+      <p className="text-sm text-gray-300 mt-1">
+        Location: <span className="font-medium">{pick_up_location} → {drop_off_location}</span>
+      </p>
       <div className="mt-3 text-sm text-gray-400 flex justify-between">
         <span className="font-semibold">{reward}</span>
         <span className="italic">#ID: {errand_Id}</span>
@@ -41,7 +50,15 @@ const ErrandCard = ({ errand_Id, title, location, description, reward, status, r
       <p className='bg-amber-500 w-32 font-medium rounded p-1 text-sm text-black mt-1'>Status: {currentStatus}</p>
       <button
         className="mt-4 w-full bg-orange-500 hover:bg-orange-600 text-black font-semibold py-2 rounded cursor-pointer"
-        onClick={() => setSelectedErrands({ errand_Id, title, pick_up_location, drop_off_location, reward, status: currentStatus })}
+        onClick={() => setSelectedErrands({
+          errand_Id,
+          title,
+          pick_up_location,
+          drop_off_location,
+          description,
+          reward,
+          status: currentStatus
+        })}
       >
         View Details
       </button>
@@ -49,6 +66,7 @@ const ErrandCard = ({ errand_Id, title, location, description, reward, status, r
         errand={selectedErrands} 
         onClose={() => setSelectedErrands(null)} 
         onAccept={handleAccept}
+        loading={loading}
       />
     </div>
   );

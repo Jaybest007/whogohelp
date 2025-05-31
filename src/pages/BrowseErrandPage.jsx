@@ -45,7 +45,12 @@ const BrowseErrandsPage = () => {
           <ErrandCard 
             key={errand.errand_Id}
             errand_Id={errand.errand_Id}
-            {...errand}
+            title={errand.title}
+            pick_up_location={errand.pick_up_location}
+            drop_off_location={errand.drop_off_location}
+            reward={errand.reward}
+            status={errand.status}
+            description={errand.description}
             refreshList={fetchErrands} // <-- Add this line
           />
         ))}
