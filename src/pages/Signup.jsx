@@ -17,6 +17,7 @@ function Signup() {
     const [error, setError] = useState({});
     const [success, setSuccess] = useState("");
     const [loading, setLoading] = useState(false);
+    const [inputType, setInputType] = useState("password");
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9])[^\s]{8,}$/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -42,7 +43,11 @@ function Signup() {
             setError(prev => ({ ...prev, confirmPassword: "Passwords do not match" }));
         }
     }
-
+    function showpassword(event){
+        event.preventDefault();
+        setInputType(prevType => prevType === "password" ? "text" : "password");
+        
+    }
     async function handleSubmit(event) {
         event.preventDefault();
         setLoading(true);
@@ -110,11 +115,11 @@ function Signup() {
                     {error.server && <p className="text-black mb-2 italic">{error.server}</p>}
 
                     {/* Name */}
-                    <label className="text-white font-bold text-lg">Name
+                    <label className="text-white font-bold text-lg">Full name:
                         <input type="text"
                             name="name"
                             className="input-style"
-                            placeholder="Name"
+                            placeholder="Enter full name"
                             value={formdata.name}
                             onChange={handleInputChange}
                         />
@@ -122,12 +127,12 @@ function Signup() {
                     {error.name && <p className="text-black italic">{error.name}</p>}
 
                     {/* Username */}
-                    <label className="text-white font-bold text-lg">Username
+                    <label className="text-white font-bold text-lg">Username:
                         <input
                             type="text"
                             name="username"
                             className="input-style"
-                            placeholder="Username"
+                            placeholder="Enter a valid Username"
                             value={formdata.username}
                             onChange={handleInputChange}
                         />
@@ -135,12 +140,12 @@ function Signup() {
                     {error.username && <p className="text-black italic">{error.username}</p>}
 
                     {/* Email */}
-                    <label className="text-white font-bold text-lg">Email
+                    <label className="text-white font-bold text-lg">Email:
                         <input
                             type="email"
                             name="email"
                             className="input-style"
-                            placeholder="Email"
+                            placeholder="Enter a valid Email"
                             value={formdata.email}
                             onChange={handleInputChange}
                         />
@@ -148,9 +153,9 @@ function Signup() {
                     {error.email && <p className="text-black italic">{error.email}</p>}
 
                     {/* Password */}
-                    <label className="text-white font-bold text-lg">Password
+                    <label className="text-white font-bold text-lg">Password:
                         <input
-                            type="password"
+                            type={inputType}
                             name="password"
                             className="input-style"
                             placeholder="Password"
@@ -161,9 +166,9 @@ function Signup() {
                     {error.password && <p className="text-black italic">{error.password}</p>}
 
                     {/* Confirm Password */}
-                    <label className="text-white font-bold text-lg">Confirm Password
+                    <label className="text-white font-bold text-lg">Confirm Password:
                         <input
-                            type="password"
+                            type={inputType}
                             name="confirmPassword"
                             className="input-style"
                             placeholder="Confirm Password"
@@ -172,7 +177,9 @@ function Signup() {
                         />
                     </label>
                     {error.confirmPassword && <p className="text-black italic">{error.confirmPassword}</p>}
-
+                    
+                    {/* show password toggle */}
+                    <button className='text-white float-right' onClick={showpassword}>{inputType === "password" ? "Show password " : "Hide Password"}</button>
                     <button
                         type="submit"
                         className="bg-black w-full text-white py-3 mt-4 rounded-xl hover:bg-gray-900 transition-colors duration-200 text-lg"

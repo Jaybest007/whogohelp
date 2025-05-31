@@ -37,7 +37,7 @@ function Navbar() {
                 </button>
                 {/* Desktop menu */}
                 <ul className="hidden md:flex space-x-2 items-center">
-                    {!loggedIn ? (
+                    {loggedIn ? (
                         <>
                             <li>
                                 <Link to="/dashboard" className="block p-2 hover:bg-orange-600 rounded" onClick={() => setMenuOpen(false)}>Dashboard</Link>

@@ -20,8 +20,8 @@ const ErrandCard = ({ errand_Id, title, location, description, reward, status, r
         setCurrentStatus('progress');
         refreshList();
       }
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.log(err);
     } finally {
       setLoading(false);
       setSelectedErrands(null);

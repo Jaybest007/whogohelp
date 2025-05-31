@@ -11,7 +11,8 @@ import { useNavigate } from 'react-router-dom';
     });
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
+    const [inputType, setInputType] = useState("password");
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const navigate = useNavigate()
 
@@ -35,6 +36,11 @@ import { useNavigate } from 'react-router-dom';
         }
    
     }   
+
+    function showpassword(event){
+        event.preventDefault();
+        setInputType(prevType => prevType === "password" ? "text" : "password");
+    }
 
 
     async function handleSubmit(event){
@@ -93,7 +99,7 @@ import { useNavigate } from 'react-router-dom';
     
     return(
         <div className="container p-5 justify-center flex items-center min-h-screen ">
-            <div className="wrapper rounded-2xl w-4xl h-auto bg-orange-500 p-10 shadow-lg md:w-1/4 shadow-lg">
+            <div className="wrapper rounded-2xl w-4xl h-auto bg-orange-500 p-10 shadow-lg md:w-1/4 lg:w-1/4">
                 <h1 className=" font-bold text-4xl text-white mb-5 underline underline-offset-4">Login</h1> 
                 <p className='text-black text-l mb-2 italic '>{error}</p>
                 <p className='text-black text-l mb-2 italic '>{success}</p>
@@ -105,7 +111,7 @@ import { useNavigate } from 'react-router-dom';
                     type="email" 
                     name='email'
                     className="input-style" 
-                    placeholder="Email" 
+                    placeholder="Enter Email address" 
                     value={loginData.email}
                     onChange={handleInputChange}
                     />
@@ -113,7 +119,7 @@ import { useNavigate } from 'react-router-dom';
 
                 <label htmlFor="Password" className="text-white font-bold text-lg">Password
                     <input 
-                    type="password" 
+                    type={inputType}
                     name='password'
                     className="input-style" 
                     placeholder="Password" 
@@ -121,8 +127,7 @@ import { useNavigate } from 'react-router-dom';
                     onChange={handleInputChange}
                     />
                 </label>
-                    
-
+                <button className='text-white float-right' onClick={showpassword}>{inputType === "password" ? "Show password" : "Hide password"}</button>
                 <button 
                     className="bg-black w-full text-white py-3 my-4 rounded-xl 
                     hover:bg-gray-900 cursor-pointer transition-colors duration-200 text-base md:text-lg">

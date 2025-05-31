@@ -34,7 +34,8 @@ if($data === null){
 if(
     !isset($data['title']) ||
     !isset($data['description']) ||
-    !isset($data['location']) ||
+    !isset($data['pickUpLocation']) ||
+    !isset($data['dropOffLocation']) ||
     !isset($data['reward']) 
 ){
     http_response_code(400);
@@ -54,15 +55,16 @@ $time = date("h:i A"); // Fixed double semicolon
 $errandID = generateOrderId();
 $title = htmlspecialchars(trim($data['title']));
 $description = htmlspecialchars(trim($data['description']));
-$location = htmlspecialchars(trim($data['location']));
+$pick_up_location = htmlspecialchars(trim($data['pickUpLocation']));
+$drop_off_location = htmlspecialchars(trim($data['dropOffLocation']));
 $reward = htmlspecialchars(trim($data['reward']));
-$notes = htmlspecialchars(trim($data['notes']));
+$notes = htmlspecialchars(trim($data['notes']?? ''));
 $posted_by = $_SESSION['USER']['username'];
 $status = "pending";
 
 
 //let send data to databse
-$sql = "INSERT INTO errands (errand_Id, date, time, title, description, location, reward, notes, posted_by, status) VALUES (:errandId, :date, :time, :title, :description, :location, :reward, :notes, :posted_by, :status)";
+$sql = "INSERT INTO errands (errand_Id, date, time, title, description, pick_up_location, drop_off_location, reward, notes, posted_by, status) VALUES (:errandId, :date, :time, :title, :description, :pick_up_location, :drop_off_location, :reward, :notes, :posted_by, :status)";
 $stmt = $pdo->prepare($sql);
 
 try{
@@ -72,7 +74,8 @@ try{
         'time' => $time,
         'title' => $title,
         'description' => $description,
-        'location' => $location,
+        'pick_up_location' => $pick_up_location,
+        'drop_off_location' => $drop_off_location,
         'reward' => $reward,
         'notes' => $notes,
         'posted_by' => $posted_by,
